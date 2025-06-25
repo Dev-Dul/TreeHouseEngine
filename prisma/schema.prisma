@@ -16,10 +16,13 @@ datasource db {
 
 model User {
   id       Int        @id @default(autoincrement())
+  bio      String?
   name     String
   email    String
   username String
   password String
+  profile  String?
+  backgrd  String?
   messages Messages[]
   friends  Friend[]
   groups   Nests[]
