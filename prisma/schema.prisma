@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String
+  username String
+  password String
+  messages Messages[]
+  friends  Friend[]
+  groups   Nests[]
+}
+
+model Messages {
+  id       Int      @id @default(autoincrement())
+  text     String
+  author   User     @relation(fields: [userId], references: [id])
+  userId   Int
+  friend   Friend?  @relation(fields: [friendId], references: [id])
+  friendId Int?
+  group    Groups?  @relation(fields: [groupId], references: [id])
+  groupId  Int?
+  created  DateTime @default(now())
+}
+
+model Friend {
+  id       Int        @id @default(autoincrement())
+  friend   User       @relation(fields: [friendId], references: [id])
+  friendId Int
+  messages Messages[]
+}
+
+model Groups {
+  id       Int        @id @default(autoincrement())
+  name     String
+  created  DateTime   @default(now())
+  members  Nests[]
+  Messages Messages[]
+}
+
+model Nests {
+  id       Int      @id @default(autoincrement())
+  user     User     @relation(fields: [userId], references: [id])
+  userId   Int
+  group    Groups   @relation(fields: [groupId], references: [id])
+  groupId  Int
+  role     String?
+  joinedAt DateTime @default(now())
+
+  @@unique([userId, groupId])
+}
