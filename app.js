@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require("express");
 const session = require("express-session");
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
+const { PrismaClient } = require("./generated/prisma/client");
 const { passport } = require("./auth/passport-config");
 
 
@@ -8,10 +10,20 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(session({
+    cookie: { 
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    },
     secret: "dattebayo!",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
+    resave: true,
+    saveUninitialized: true,
+    store: new PrismaSessionStore(
+        new PrismaClient(),
+        {
+            checkPeriod: 2 * 60 * 1000,
+            dbRecordIdIsSessionId: true,
+            dbRecordIdFunction: undefined,
+        }
+    )
 }));
 
 app.use(passport.initialize());
