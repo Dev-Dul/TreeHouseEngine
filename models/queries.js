@@ -17,7 +17,7 @@ async function createNewMessageFriend(text, authorId, friendId) {
     await prisma.messages.create({
         data: {
             text: text,
-            author: { connect: authorId},
+            author: { connect: authorId },
             friend: { connect: friendId },
         }
     });
@@ -65,6 +65,11 @@ async function createNewGroup(name){
 async function getUserById(id){
     return await prisma.user.findUnique({
         where: { id: id },
+        include: {
+            message: true,
+            friends: true,
+            groups: true,
+        }
     })
 }
 
@@ -110,6 +115,22 @@ async function getGroupById(groupId){
     });
 }
 
+// update functions
+
+async function updateProfile(name, email, username, bio, profileUrl, backUrl, userId){
+    await prisma.user.update({
+        where: { id: userId },
+        data: {
+            name: name, 
+            bio: bio,
+            email: email,
+            username: username,
+            profile: profileUrl,
+            backgrd: backUrl,
+        }
+    });
+}
+
 // destroy functions
 async function deleteMessage(id){
     await prisma.messages.delete({
@@ -143,6 +164,7 @@ module.exports = {
     getUserFriends,
     getUserMessagesToFriend,
     deleteMessage,
+    updateProfile,
 }
 
 

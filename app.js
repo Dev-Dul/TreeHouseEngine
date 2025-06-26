@@ -7,6 +7,7 @@ const { passport } = require("./auth/passport-config");
 const gatesRouter = require("./routes/gatesRouter");
 const groupRouter = require('./routes/groupRouter');
 const friendRouter = require("./routes/friendRouter");
+const profileRouter = require("./routes/profileRouter");
 
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(passport.session());
 app.use("/api/v1/", gatesRouter);
 app.use("/api/v1/groups/", groupRouter);
 app.use("/api/v1/friends/", friendRouter);
+app.use("/api/v1/profiles/", profileRouter);
 
 app.use((err, req, res, next) => {
     res.status(500).json({ message: err.message });
