@@ -4,6 +4,8 @@ const session = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("./generated/prisma/client");
 const { passport } = require("./auth/passport-config");
+const gatesRouter = require("./routes/gatesRouter");
+const groupRouter = require('./routes/groupRouter');
 
 
 const app = express();
@@ -29,7 +31,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+app.use("/api/v1/", gatesRouter);
+app.use("/api/v1/groups/", groupRouter);
 
 app.use((err, req, res, next) => {
     res.status(500).json({ message: err.message });

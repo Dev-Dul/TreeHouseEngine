@@ -23,7 +23,7 @@ async function createNewMessageFriend(text, authorId, friendId) {
     });
 }
 
-async function createNewMessageGroup(text, authorId, groupId) {
+async function createNewMessageGroup(text, authorId, groupId){
     await prisma.messages.create({
         data: {
             text: text,
@@ -100,6 +100,16 @@ async function getGroups(){
     });
 }
 
+async function getGroupById(groupId){
+    return await prisma.groups.findUnique({
+        where: { id: groupId },
+        include: {
+            members: true,
+            Messages: true,
+        }
+    });
+}
+
 // destroy functions
 async function deleteMessage(id){
     await prisma.messages.delete({
@@ -127,7 +137,7 @@ module.exports = {
     addFriend,
     joinGroup,
     getGroups,
-    getUserById,
+    getGroupById,
     getUserByName,
     getUserFriends,
     getUserMessagesToFriend,
