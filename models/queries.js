@@ -138,6 +138,7 @@ module.exports = {
     joinGroup,
     getGroups,
     getGroupById,
+    getUserById,
     getUserByName,
     getUserFriends,
     getUserMessagesToFriend,
