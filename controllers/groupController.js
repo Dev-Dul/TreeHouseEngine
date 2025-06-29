@@ -1,12 +1,12 @@
 const db = require("../models/queries");
 
 
-async function createNewGroup(res, req){
-    const { groupName } = req.body;
-    if(!groupName) return res.status(400).json({ messages: "Group Name Missing"});
+async function createNewGroup(req, res){
+    const { name } = req.body;
+    if(!name) return res.status(400).json({ messages: "Group Name Missing"});
 
     try{
-        await db.createNewGroup(groupName);
+        await db.createNewGroup(name);
         return res.status(200).json({ message: "Group created Successfully!"});
     }catch(err){
         return res.status(500).json({ message: err.message });       

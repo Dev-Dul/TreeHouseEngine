@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require("cors");
 const express = require("express");
 const session = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
@@ -11,6 +12,11 @@ const profileRouter = require("./routes/profileRouter");
 
 
 const app = express();
+app.use(cors({
+    origin: "*",
+    credentials: false,
+}))
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(session({
@@ -34,7 +40,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api/v1/", gatesRouter);
-app.use("/api/v1/groups/", groupRouter);
+app.use("/api/v1/groups", groupRouter);
 app.use("/api/v1/friends/", friendRouter);
 app.use("/api/v1/profiles/", profileRouter);
 
