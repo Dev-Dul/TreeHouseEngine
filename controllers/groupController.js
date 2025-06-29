@@ -1,10 +1,9 @@
-const { useId } = require("react");
 const db = require("../models/queries");
 
 
 async function createNewGroup(res, req){
     const { groupName } = req.body;
-    if(!groupName) return res.status(401).json({ messages: "Group Name Missing"});
+    if(!groupName) return res.status(400).json({ messages: "Group Name Missing"});
 
     try{
         await db.createNewGroup(groupName);
@@ -17,11 +16,24 @@ async function createNewGroup(res, req){
 async function joinGroup(req, res){
     const { userId } = req.body;
     const { groupId } = req.params;
-    if(!groupId || !userId) return res.status(401).json({ message: "Incomplete or missing credentials!"});
+    if(!groupId || !userId) return res.status(400).json({ message: "Incomplete or missing credentials!"});
 
     try{
         await db.joinGroup(Number(userId), Number(groupId));
-        return res.status(200).json({ message: "Group joined successfylly!"});
+        return res.status(200).json({ message: "Nest joined successfylly!"});
+    }catch(err){
+        return res.status(500).json({ message: err.message});
+    }
+}
+
+async function leaveGroup(req, res){
+    const { userId } = req.body;
+    const { groupId } = req.params;
+    if(!groupId || !userId) return res.status(400).json({ message: "Incomplete or missing credentials!"});
+
+    try{
+        await db.leaveGroup(Number(userId), Number(groupId));
+        return res.status(200).json({ message: "Left nest successfylly!"});
     }catch(err){
         return res.status(500).json({ message: err.message});
     }
@@ -45,7 +57,7 @@ async function getGroupById(req, res){
 
 async function createNewMessageGroup(req, res){
     const { text, authorId, groupId } = req.body;
-    if(!text || !authorId || !groupId) return res.status(401).json({ message: "Credentials missing or incomplete."});
+    if(!text || !authorId || !groupId) return res.status(400).json({ message: "Credentials missing or incomplete."});
    
     try{
         await db.createNewMessageGroup(text, Number(authorId), Number(groupId));
@@ -59,6 +71,7 @@ async function createNewMessageGroup(req, res){
 module.exports = {
     getGroups,
     joinGroup,
+    leaveGroup,
     getGroupById,
     createNewGroup,
     createNewMessageGroup,

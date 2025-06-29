@@ -142,15 +142,14 @@ async function deleteMessage(id){
     })
 }
 
-async function removeFriend(id){
-   await prisma.friend.delete({
-        where: { id: id },
-   });
-}
-
 async function leaveGroup(userId, groupId){
     await prisma.nests.delete({
-        where: { }
+        where: {
+            userId_groupId:{
+                userId: userId,
+                groupId: groupId,
+            }
+         },
     })
 }
 
@@ -161,6 +160,7 @@ module.exports = {
     createNewMessageGroup,
     addFriend,
     joinGroup,
+    leaveGroup,
     getGroups,
     getGroupById,
     getUserById,
