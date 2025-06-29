@@ -17,7 +17,7 @@ async function updateProfile(req, res){
 }
 
 async function getUserById(req, res){
-    const { userId } = req.body;
+    const { userId } = req.params;
     if(!userId) return res.status(401).json({ message: "Credentials incomplete or missing"});
     
     try{
@@ -29,7 +29,24 @@ async function getUserById(req, res){
     
 }
 
+async function getAllUsers(req, res){
+    const users = await db.getAllUsers();
+    res.status(200).json({ success: true, users: users });
+}
+
+async function logOut(req, res, next){
+    if(!req.user) return res.status(400).json({ message: "No user logged in."});
+    
+    req.logout((err) => {
+        if(err){
+            return next(err);
+        }
+    })
+}
+
 module.exports = {
+    logOut,
     getUserById,
     updateProfile,
+    getAllUsers,
 }

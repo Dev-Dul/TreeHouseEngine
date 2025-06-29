@@ -34,7 +34,7 @@ async function getGroups(req, res){
 
 async function getGroupById(req, res){
     const { groupId } = req.params;
-    if(!groupId) return res.status(401).json({ message: "Group Id missing"});
+    if(!groupId) return res.status(400).json({ message: "Group Id missing"});
     try{
         const group = await db.getGroupById(Number(groupId));
         return res.status(200).json({ group: group });

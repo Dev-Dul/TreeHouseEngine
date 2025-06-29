@@ -66,7 +66,7 @@ async function getUserById(id){
     return await prisma.user.findUnique({
         where: { id: id },
         include: {
-            message: true,
+            messages: true,
             friends: true,
             groups: true,
         }
@@ -82,6 +82,10 @@ async function getUserByName(name){
             groups: true,
         }
     })
+}
+
+async function getAllUsers(){
+    return await prisma.user.findMany();
 }
 
 async function getUserMessagesToFriend(friendId){
@@ -160,6 +164,7 @@ module.exports = {
     getGroups,
     getGroupById,
     getUserById,
+    getAllUsers,
     getUserByName,
     getUserFriends,
     getUserMessagesToFriend,
