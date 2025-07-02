@@ -32,7 +32,7 @@ async function leaveGroup(req, res){
 
     try{
         await db.leaveGroup(Number(userId), Number(groupId));
-        return res.status(200).json({ message: "Left nest successfylly!"});
+        return res.status(200).json({ message: "Left nest successfully!"});
     }catch(err){
         return res.status(500).json({ message: err.message});
     }
@@ -55,11 +55,11 @@ async function getGroupById(req, res){
 }
 
 async function createNewMessageGroup(req, res){
-    const { text, authorId, groupId } = req.body;
-    if(!text || !authorId || !groupId) return res.status(400).json({ message: "Credentials missing or incomplete."});
+    const { text, senderId, groupId } = req.body;
+    if(!text || !senderId || !groupId) return res.status(400).json({ message: "Credentials missing or incomplete."});
    
     try{
-        await db.createNewMessageGroup(text, Number(authorId), Number(groupId));
+        await db.createNewMessageGroup(text, Number(senderId), Number(groupId));
         return res.status(200).json({ message: "Message created successfully!."});
     }catch(err){
         return res.status(500).json({ message: err.message});

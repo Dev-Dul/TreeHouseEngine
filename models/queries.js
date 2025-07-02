@@ -27,12 +27,16 @@ async function createNewMessageFriend(text, senderId, recipientId){
     });
 }
 
-async function createNewMessageGroup(text, authorId, groupId){
+async function createNewMessageGroup(text, senderId, groupId){
     await prisma.messages.create({
         data: {
             text: text,
-            author: { connect: authorId },
-            group: { connect: groupId },
+            sender: { 
+                connect:  { id: senderId }, 
+            },
+            group: { 
+                connect: { id: groupId }, 
+            },
         }
     });
 }
@@ -141,7 +145,7 @@ async function getGroupById(groupId){
                 include: { user: true },
             },
             Messages: {
-                include: { sender: true },
+                include: { group: true, sender: true },
             },
         }
     });

@@ -10,6 +10,6 @@ groupRouter.get("/:groupId/", groupController.getGroupById);
 groupRouter.post("/join", groupController.joinGroup);
 groupRouter.post("/:groupId/leave", groupController.leaveGroup);
 groupRouter.post("/new", groupController.createNewGroup);
-groupRouter.post("/:groupId/messsages/new", groupController.createNewMessageGroup);
+groupRouter.post("/:groupId/messages/new", groupController.createNewMessageGroup);
 
 module.exports = groupRouter;
