@@ -14,13 +14,12 @@ async function createNewGroup(req, res){
 }
 
 async function joinGroup(req, res){
-    const { userId } = req.body;
-    const { groupId } = req.params;
+    const { userId, groupId } = req.body;
     if(!groupId || !userId) return res.status(400).json({ message: "Incomplete or missing credentials!"});
 
     try{
         await db.joinGroup(Number(userId), Number(groupId));
-        return res.status(200).json({ message: "Nest joined successfylly!"});
+        return res.status(200).json({ message: "Nest joined successfully!"});
     }catch(err){
         return res.status(500).json({ message: err.message});
     }

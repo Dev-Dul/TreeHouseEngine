@@ -29,8 +29,17 @@ async function getUserById(req, res){
     
 }
 
+async function hydrateUser(req, res){
+    if(req.isAuthenticated){
+        res.status(200).json({ user: req.user });
+    }else{
+        res.status(401).json({ message: "User isn't logged In" });
+    }
+}
+
 async function getAllUsers(req, res){
-    const users = await db.getAllUsers();
+    let users = await db.getAllUsers();
+    users = users.filter(user => user.id !== req.user.id)
     res.status(200).json({ success: true, users: users });
 }
 
@@ -49,4 +58,5 @@ module.exports = {
     getUserById,
     updateProfile,
     getAllUsers,
+    hydrateUser,
 }

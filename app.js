@@ -13,14 +13,17 @@ const profileRouter = require("./routes/profileRouter");
 
 const app = express();
 app.use(cors({
-    origin: "*",
-    credentials: false,
+    origin: process.env.ALLOWED_DOMAIN,
+    credentials: true,
 }))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(session({
     cookie: { 
+        // httpOnly: true,
+        // sameSite: "none",
+        // secure: false,
         maxAge: 7 * 24 * 60 * 60 * 1000
     },
     secret: "dattebayo!",
@@ -41,8 +44,8 @@ app.use(passport.session());
 
 app.use("/api/v1/", gatesRouter);
 app.use("/api/v1/groups", groupRouter);
-app.use("/api/v1/friends/", friendRouter);
-app.use("/api/v1/profiles/", profileRouter);
+app.use("/api/v1/friends", friendRouter);
+app.use("/api/v1/profiles", profileRouter);
 
 app.use((err, req, res, next) => {
     res.status(500).json({ message: err.message });

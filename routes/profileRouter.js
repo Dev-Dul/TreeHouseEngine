@@ -3,8 +3,9 @@ const profileRouter = Router();
 const profileController = require("../controllers/profileController");
 const upload = require("../models/multer-config");
 
-profileRouter.get("/:userId", profileController.getUserById);
 profileRouter.get("/all", profileController.getAllUsers);
+profileRouter.get("/hydrate", profileController.hydrateUser);
+profileRouter.get("/:userId", profileController.getUserById);
 profileRouter.post("/update", upload.fields(
     { name: 'pofilePic', maxCount: 1 },
     { name: 'backgroundPic', maxCount: 1}),

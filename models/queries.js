@@ -13,12 +13,16 @@ async function createNewUser(name, email, username, password){
     });
 }
 
-async function createNewMessageFriend(text, authorId, friendId) {
+async function createNewMessageFriend(text, senderId, recipientId){
     await prisma.messages.create({
         data: {
             text: text,
-            author: { connect: authorId },
-            friend: { connect: friendId },
+            sender: { 
+                connect: { id: senderId }
+            },
+            recipient: { 
+                connect: { id: recipientId }
+            },
         }
     });
 }
@@ -27,16 +31,18 @@ async function createNewMessageGroup(text, authorId, groupId){
     await prisma.messages.create({
         data: {
             text: text,
-            author: { connect: authorId},
+            author: { connect: authorId },
             group: { connect: groupId },
         }
     });
 }
 
-async function addFriend(userId){
+// Add a friend relationship between two users
+async function addFriend(userId, friendId) {
     await prisma.friend.create({
         data: {
-            friend: { connect: userId },
+            user: { connect: { id: userId } },
+            friend: { connect: { id: friendId } }
         }
     });
 }
@@ -44,8 +50,12 @@ async function addFriend(userId){
 async function joinGroup(userId, groupId){
     await prisma.nests.create({
         data: {
-            user: { connect: userId },
-            group: { connect: groupId },
+            user: { 
+                connect: { id: userId} 
+            },
+            group: { 
+                connect:  { id: groupId} 
+            },
             role: "member",
         }
     })
@@ -66,9 +76,16 @@ async function getUserById(id){
     return await prisma.user.findUnique({
         where: { id: id },
         include: {
-            messages: true,
-            friends: true,
-            groups: true,
+            sentMessages: true,
+            friends: {
+                include: { friend: true }
+            },
+            groups: {
+                include: {
+                     group: true,
+                     user: true,
+                 }
+            },
         }
     })
 }
@@ -77,9 +94,16 @@ async function getUserByName(name){
     return await prisma.user.findFirst({
         where: { username: name },
         include: {
-            message: true,
-            friends: true,
-            groups: true,
+            sentMessages: true,
+            friends: {
+                include: { friend: true }
+            },
+            groups: {
+                include: {
+                     group: true,
+                     user: true,
+                 }
+            },
         }
     })
 }
@@ -88,9 +112,9 @@ async function getAllUsers(){
     return await prisma.user.findMany();
 }
 
-async function getUserMessagesToFriend(friendId){
+async function getUserMessagesToFriend(userId){
     return await prisma.messages.findMany({
-        where: { friendId: friendId }
+        where: { senderId: userId }
     })
 }
 
@@ -113,8 +137,12 @@ async function getGroupById(groupId){
     return await prisma.groups.findUnique({
         where: { id: groupId },
         include: {
-            members: true,
-            Messages: true,
+            members: {
+                include: { user: true },
+            },
+            Messages: {
+                include: { sender: true },
+            },
         }
     });
 }
@@ -136,10 +164,8 @@ async function updateProfile(name, email, username, bio, profileUrl, backUrl, us
 }
 
 // destroy functions
-async function deleteMessage(id){
-    await prisma.messages.delete({
-        where: { id: id },
-    })
+async function deleteFriendRows(){
+    await prisma.friend.deleteMany()
 }
 
 async function leaveGroup(userId, groupId){
@@ -168,8 +194,8 @@ module.exports = {
     getUserByName,
     getUserFriends,
     getUserMessagesToFriend,
-    deleteMessage,
     updateProfile,
+    deleteFriendRows
 }
 
 

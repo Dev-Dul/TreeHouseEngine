@@ -23,28 +23,33 @@ model User {
   password String
   profile  String?
   backgrd  String?
-  messages Messages[]
-  friends  Friend[]
+  sentMessages Messages[] @relation("sender")
+  receivedMessages Messages[] @relation("recipient")
+  friends  Friend[]   @relation("UserFriends") // User has many friends
   groups   Nests[]
+  addedBy   Friend[]  @relation("UserAddedBy")
 }
 
 model Messages {
   id       Int      @id @default(autoincrement())
   text     String
-  author   User     @relation(fields: [userId], references: [id])
-  userId   Int
-  friend   Friend?  @relation(fields: [friendId], references: [id])
-  friendId Int?
+  sender   User     @relation("sender", fields: [senderId], references: [id])
+  senderId   Int
+  recipient   User?  @relation("recipient", fields: [recipientId], references: [id])
+  recipientId Int?
   group    Groups?  @relation(fields: [groupId], references: [id])
   groupId  Int?
   created  DateTime @default(now())
 }
 
 model Friend {
-  id       Int        @id @default(autoincrement())
-  friend   User       @relation(fields: [friendId], references: [id])
-  friendId Int
-  messages Messages[]
+  id     Int  @id @default(autoincrement())
+  user   User @relation("UserFriends", fields: [userId], references: [id])
+  userId Int // The one who owns the friend list
+
+  friend   User @relation("UserAddedBy", fields: [friendId], references: [id])
+  friendId Int // The user who is being added
+
 }
 
 model Groups {
@@ -67,9 +72,9 @@ model Nests {
   @@unique([userId, groupId])
 }
 
-model Session{
-  id String @id 
-  sid String @unique
-  data String
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
   expiresAt DateTime
 }

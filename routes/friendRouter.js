@@ -4,10 +4,10 @@ const friendController = require("../controllers/friendController");
 
 // get routes
 friendRouter.get("/", friendController.getUserFriends);
-friendRouter.get("/:friendId/messages", friendController.getUserMessagesToFriend);
+friendRouter.get("/:userId/messages", friendController.getUserMessagesToFriend);
 
 // post routes
 friendRouter.post("/add", friendController.addFriend);
-friendRouter.post("/:friendId/messages/new", friendController.createNewMessageFriend);
+friendRouter.post("/:recipientId/messages/new", friendController.createNewMessageFriend);
 
 module.exports = friendRouter;
