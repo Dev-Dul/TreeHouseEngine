@@ -21,9 +21,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(session({
     cookie: { 
-        // httpOnly: true,
-        // sameSite: "none",
-        // secure: false,
+        httpOnly: true,
+        sameSite: "none",
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 7 * 24 * 60 * 60 * 1000
     },
     secret: "dattebayo!",

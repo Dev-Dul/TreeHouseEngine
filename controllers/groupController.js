@@ -15,6 +15,7 @@ async function createNewGroup(req, res){
 
 async function joinGroup(req, res){
     const { userId, groupId } = req.body;
+    if(!req.user) return res.status(403).json({ message: "You have no permission to continue with this operation" });
     if(!groupId || !userId) return res.status(400).json({ message: "Incomplete or missing credentials!"});
 
     try{
@@ -28,6 +29,7 @@ async function joinGroup(req, res){
 async function leaveGroup(req, res){
     const { userId } = req.body;
     const { groupId } = req.params;
+    if(!req.user) return res.status(403).json({ message: "You have no permission to continue with this operation"});
     if(!groupId || !userId) return res.status(400).json({ message: "Incomplete or missing credentials!"});
 
     try{

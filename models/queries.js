@@ -153,11 +153,10 @@ async function getGroupById(groupId){
 
 // update functions
 
-async function updateProfile(name, email, username, bio, profileUrl, backUrl, userId){
+async function updateProfile(userId, email, username, bio = null, profileUrl = null, backUrl = null){
     await prisma.user.update({
         where: { id: userId },
         data: {
-            name: name, 
             bio: bio,
             email: email,
             username: username,
