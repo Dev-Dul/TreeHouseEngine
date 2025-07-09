@@ -50,7 +50,7 @@ async function hydrateUser(req, res){
 
 async function getAllUsers(req, res){
     let users = await db.getAllUsers();
-    users = users.filter(user => user.id !== req.user.id)
+    users = users.filter(user => user.id !== req.user.id);
     res.status(200).json({ success: true, users: users });
 }
 
