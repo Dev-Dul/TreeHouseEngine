@@ -38,10 +38,11 @@ async function getUserFriends(req, res){
 }
 
 async function getUserMessagesToFriend(req, res){
-    const { userId } = req.params;
-    if(!userId) return res.status(400).json({ message: "friendId missing."});
+    const { recipientId } = req.params;
+    if(!recipientId) return res.status(400).json({ message: "recipientId missing."});
+
     try{
-        const messages = await db.getUserMessagesToFriend(Number(userId));
+        const messages = await db.getUserMessagesToFriend(Number(recipientId));
         return res.status(200).json({ messages: messages });
     }catch(err){
         return res.status(500).json({ message: err.message });

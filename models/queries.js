@@ -116,9 +116,9 @@ async function getAllUsers(){
     return await prisma.user.findMany();
 }
 
-async function getUserMessagesToFriend(userId){
+async function getUserMessagesToFriend(recipientId){
     return await prisma.messages.findMany({
-        where: { senderId: userId }
+        where: { recipientId: recipientId }
     })
 }
 

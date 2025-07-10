@@ -15,12 +15,15 @@ const app = express();
 app.use(cors({
     origin: process.env.ALLOWED_DOMAIN,
     credentials: true,
-}))
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false}));
 app.use(session({
     cookie: { 
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : undefined,
         maxAge: 7 * 24 * 60 * 60 * 1000
     },
     secret: "dattebayo!",
