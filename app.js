@@ -18,7 +18,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(session({
     cookie: { 
         httpOnly: true,
@@ -41,6 +41,9 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("ALLOWED_DOMAIN:", process.env.ALLOWED_DOMAIN);
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
 app.use("/api/v1/", gatesRouter);
 app.use("/api/v1/groups", groupRouter);
