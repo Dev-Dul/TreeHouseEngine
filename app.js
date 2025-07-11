@@ -12,6 +12,7 @@ const profileRouter = require("./routes/profileRouter");
 
 
 const app = express();
+app.set("trust proxy", 1);
 app.use(cors({
     origin: process.env.ALLOWED_DOMAIN,
     credentials: true,
@@ -41,9 +42,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-console.log("NODE_ENV:", process.env.NODE_ENV);
-console.log("ALLOWED_DOMAIN:", process.env.ALLOWED_DOMAIN);
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
 
 app.use("/api/v1/", gatesRouter);
 app.use("/api/v1/groups", groupRouter);

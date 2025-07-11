@@ -46,6 +46,7 @@ function handleLogin(req, res, next){
         req.login(user, (err) => {
             if(err) return next(err);
             console.log("User Logged In Successfully!");
+            console.log("session:", req.session);
             return res.status(200).json({ message: "login successful", user: user });
         });
     })(req, res, next);
