@@ -28,7 +28,7 @@ app.use(session({
     },
     secret: "dattebayo!",
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: new PrismaSessionStore(
         new PrismaClient(),
         {
